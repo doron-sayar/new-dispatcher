@@ -35,10 +35,6 @@ const routes: Routes = [
     path: 'edit-ticket/:ticketNum',
     loadChildren: () => import('./edit-ticket/edit-ticket.module').then( m => m.EditTicketPageModule)
   },
-  {
-    path: 'search',
-    loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
-  },
 ];
 
 @NgModule({
