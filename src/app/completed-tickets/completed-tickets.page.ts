@@ -1,15 +1,15 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import * as myGlobals from '../globals'
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+  selector: 'app-completed-tickets',
+  templateUrl: './completed-tickets.page.html',
+  styleUrls: ['./completed-tickets.page.scss'],
 })
-export class HomePage implements OnInit {
+export class CompletedTicketsPage implements OnInit {
   public jsonData: any;
   public drivers: any;
   private id: any;
@@ -17,12 +17,12 @@ export class HomePage implements OnInit {
   public material:string[];
   private i:number;
   public costColor:string[];
-  public arr_medals=myGlobals.arr_medals
+  public arr_medals:any=myGlobals.arr_medals;
 
   constructor(
     private http: HttpClient,
     private alertCtrl: AlertController,
-    private router:Router
+    //public modalCtrl: ModalController,
   ) {
     this.material=[]; //must init
    }
@@ -30,8 +30,8 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.displayData();
     this.getDriversList();
-    localStorage.setItem('refresh','0')
   }
+
   getDriversList() {
     this.http.get('https://alpine.pairsite.com/dispatcher-app/get_drivers_list.php').toPromise().then((data) => {
       this.drivers = data;
@@ -39,7 +39,7 @@ export class HomePage implements OnInit {
     })
   }
   displayData() {
-    this.http.get('https://alpine.pairsite.com/dispatcher-app/get_issued_tickets.php').subscribe((data) => {
+    this.http.get('https://alpine.pairsite.com/dispatcher-app/get_completed_tickets.php').subscribe((data) => {
       //console.log(data);
       this.jsonData = data;
       for (let i=0;i<this.jsonData.length;i++){
@@ -48,9 +48,12 @@ export class HomePage implements OnInit {
         }else{
           this.jsonData[i].cost_color='danger'
         }
+        if (this.jsonData[i].info_color=='primary'){
+          this.jsonData[i].info_color='secondary'
+        }
       }
-     /* console.log(this.jsonData)
-      for (this.i=0;this.i<this.jsonData.length;this.i++){
+      console.log(this.jsonData)
+     /* for (this.i=0;this.i<this.jsonData.length;this.i++){
         this.material[this.i]=''; //init string
         
         //pallets
@@ -175,5 +178,4 @@ export class HomePage implements OnInit {
       this.jsonData = data;
     })
   }
-
 }

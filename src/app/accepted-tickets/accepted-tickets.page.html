@@ -72,10 +72,15 @@
             </ion-label>
           </ion-item>
         </ion-col>
+        <ion-col>
+          <ion-button (click)="confirmTransferTickets()" color="tertiary">
+            TRANSFER
+          </ion-button>
+        </ion-col>
       </ion-row>
       <ion-row *ngFor="let ticket of jsonData; index as i;" class="bottom-line ">
         <ion-col size-xl="1">
-          <ion-button href="/edit-ticket/{{ticket.ticket_num}}" color={{ticket.info_color}}>
+          <ion-button  href="/edit-ticket/{{ticket.ticket_num}}" color={{ticket.info_color}}>
             {{ticket.ticket_num}}
             <br>{{ticket.time_issued_short}}
           </ion-button>
@@ -116,7 +121,7 @@
         <ion-col size-xl="1">
           <ion-item lines="none">
               <img src="../../assets/images/type-{{ticket.type_id}}.png?time=12343" height="30px">
-              <img src="../../assets/images/{{arr_medals[ticket.stop_id]}}?time=12345" height="30px">
+              <img src="../../assets/images//{{arr_medals[ticket.stop_id]}}?time=12345" height="30px">
               <img src="../../assets/images/registered_ae-fe0f.png?time=12345" height="30px" *ngIf="ticket.is_return==1">
               <img src="../../assets/images/cross-mark-button_274e.png?time=12345" height="30px" *ngIf="ticket.is_dry_run==1">
           </ion-item>
@@ -127,19 +132,6 @@
             <label >
             {{ticket.driver_name}}
           </label>
-          </ion-item>
-          <ion-item lines="none" *ngIf="ticket.driver_id==null">
-            <ion-select label="Assign"
-              interface="alert"
-              (ionChange)="assignDriver(ticket.ticket_id)"
-              id="select-driver-{{ticket.ticket_id}}"
-              (click)="disableRefresh()">
-              <ion-select-option
-                value="{{driver.id}}"
-                *ngFor="let driver of drivers">
-                {{driver.FirstName}} {{driver.LastName}}
-              </ion-select-option>
-            </ion-select>
           </ion-item>
         </ion-col>
         <!--cost-->
@@ -154,39 +146,20 @@
           <!--<div *ngIf="ticket.time_arrived_to_pick_short==null && ticket.driver_id">
             <ion-button  (click)="setArrivedToPickTime(ticket.ticket_id)">Arrive</ion-button>
           </div>-->
-          <div *ngIf="ticket.time_picked_short==null">
-            <ion-button  (click)="setPickedTime(ticket.ticket_id)">Picked</ion-button>
-          </div>
-          <div *ngIf="ticket.time_picked_short && ticket.time_dropped_short==null">
-            <ion-button  (click)="setDroppedTime(ticket.ticket_id)">Dropped</ion-button>
-          </div>
-          <ion-button color="success" *ngIf="ticket.time_dropped_short" (click)="closeTicket(ticket.ticket_id)">
-            DRP {{ticket.time_dropped_short}}
-          </ion-button>
+          <ion-item lines="none">
+             <ion-label>
+              PICK: {{ticket.time_picked_short}}
+              <br>
+              DROP: {{ticket.time_dropped_short}}
+            </ion-label>
+          </ion-item>
         </ion-col>
-        <!--<ion-col size="1">
-          <div *ngIf="ticket.time_arrived_to_drop_short==null && ticket.time_picked_short">
-            <ion-button  (click)="setArrivedToDropTime(ticket.ticket_id)">Arrive</ion-button>
-          </div>
-          <div *ngIf="ticket.time_dropped_short==null && ticket.time_arrived_to_drop_short">
-            <ion-button  (click)="setDroppedTime(ticket.ticket_id)">Drop</ion-button>
-          </div>
-          <div *ngIf="ticket.time_dropped_short">
-            {{ticket.time_arrived_to_drop_short}}<br>
-            {{ticket.time_dropped_short}}
-          </div>
-        </ion-col>-->
         <ion-col size-xl="1">
           <ion-item lines="none">
             <ion-label>
               {{ticket.details}}
             </ion-label>
           </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-button href="/add-ticket/{{ticket.ticket_num}}" *ngIf="ticket.stop_id>0 && ticket.is_last_stop==0">
-            <ion-icon name="add"></ion-icon>
-          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

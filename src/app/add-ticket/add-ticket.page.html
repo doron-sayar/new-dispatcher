@@ -1,0 +1,370 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Create A New Ticket</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <!--company-->
+    <ion-row>
+      <ion-col size-xl="2">
+        <ion-item>
+          <input 
+            id="input-company-name" 
+            placeholder="Company"  
+            list="company-list" 
+            class="native-input sc-ion-input-md" 
+            autocomplete="off">
+          <datalist id="company-list">
+            <option *ngFor="let company of arrCompanies">{{company.CompanyName}}</option>
+          </datalist>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item>
+          <input 
+          id="input-called-in-by"
+          placeholder="Called In By"
+          class="native-input sc-ion-input-md" 
+          >
+        </ion-item>
+        
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item>
+          <ion-button (click)="populate()">Populate</ion-button>
+        </ion-item>
+      </ion-col>
+      <!--
+      -->
+    </ion-row>
+    <!--address from, pick time-->
+    <ion-row>
+      <!--address from-->
+      <ion-col size-xl="3">
+        <ion-item>
+          <input 
+            id="input-address-from" 
+            placeholder="Address From"  
+            class="native-input sc-ion-input-md" 
+            autocomplete="off">
+            <!--
+            <datalist id="address-from-list">
+            <option *ngFor="let address of arrAddressFrom">{{address.address_from}}</option>
+            </datalist>
+            -->
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="2">
+        <ion-item>
+         <ion-datetime-button datetime="pick-datetime"></ion-datetime-button>
+         <ion-modal [keepContentsMounted]="true">
+         <ng-template>
+          <ion-datetime 
+            id="pick-datetime"
+            locale="en-US" 
+            [firstDayOfWeek]="1"
+            [(ngModel)]="pickDateTime" 
+            (ionChange)="updatePickDateTime()"
+            hour-cycle="h24"
+            minuteValues="0,5,10,15,20,25,30,35,40,45,50,55"
+            ></ion-datetime>
+         </ng-template>
+         </ion-modal>
+         </ion-item>
+      </ion-col>
+    </ion-row>
+    <!--address to, delivery time-->
+    <ion-row>
+        <ion-col size-xl="3">
+          <ion-item>
+            <input 
+              id="input-address-to" 
+              placeholder="Destination"  
+              class="native-input sc-ion-input-md" 
+              autocomplete="off">
+              <!-- 
+              <datalist id="address-to-list">
+              <option *ngFor="let address of arrAddressTo">{{address.address_to}}</option>
+              </datalist>
+              -->
+          </ion-item>
+        </ion-col>
+        <ion-col size-xl="2">
+          <ion-item>
+           <ion-datetime-button datetime="delivery-datetime" presentation="date-time"  ></ion-datetime-button>
+           <ion-modal [keepContentsMounted]="true">
+           <ng-template>
+            <ion-datetime 
+              id="delivery-datetime" 
+              [(ngModel)]="deliveryDateTime" 
+              [firstDayOfWeek]="1" 
+              (ionChange)="updateDeliveryDateTime()"
+              hour-cycle="h24"
+              minuteValues="0,5,10,15,20,25,30,35,40,45,50,55"
+              ></ion-datetime>
+           </ng-template>
+           </ion-modal>
+           </ion-item>
+        </ion-col>
+    </ion-row>
+    <!--truck, driver, assigned truck-->
+    <ion-row>
+      <ion-col size-xl="2">
+        <ion-item color="{{itemColorTruck}}">
+          <select  id="select-truck" class="native-input sc-ion-input-md">
+            <option value="1">Pickup Truck</option>
+            <option value="2">Box Truck</option>
+            <option value="3">24 Foot Truck</option>
+            <option value="4">30 Foot Truck</option>
+            <option value="5">40 Foot Truck</option>
+          </select>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item color="{{itemColorDriver}}">
+          <select  id="select-driver" class="native-input sc-ion-input-md" >
+            <option value="0">-- Driver --</option>
+            <option *ngFor="let driver of arrDrivers" value="{{driver.id}}">{{driver.firstname}} {{driver.lastname}}</option>
+          </select>
+        </ion-item>
+      </ion-col>
+    <ion-col size-xl="1">
+      <ion-item color="{{itemColorAssigned}}">
+        <select  id="select-assigned-truck" class="native-input sc-ion-input-md" >
+          <option value="-1">-- Truck --</option>
+          <option *ngFor="let truck of arrAssignedTrucks" value="{{truck.id}}">{{truck.truck_name}}</option>
+        </select>
+      </ion-item>
+    </ion-col>
+    </ion-row>
+    <!--Type, Stop, Return-->
+    <ion-row>
+      <!--type-->
+      <ion-col size-xl="1">
+        <ion-item color="{{itemColorType}}">
+          <select  id="select-type" class="native-input sc-ion-input-md" >
+            <option value="1" >4 Hr</option>
+            <option value="2" >Priority</option>
+            <option value="3" >Freight</option>
+          </select>
+        </ion-item>
+      </ion-col>
+      <!--stop-->
+      <ion-col size-xl="1">
+        <ion-item color="{{itemColorStop}}">
+          <select id="select-stop" class="native-input sc-ion-input-md">
+            <option value="0">Single Stop</option>
+            <option value="1">1st Stop</option>
+            <option value="2">2nd Stop</option>
+            <option value="3">3rd Stop</option>
+            <option value="4">4th Stop</option>
+            <option value="5">5th Stop</option>
+          </select>
+        </ion-item>
+      </ion-col>
+      <!--pair ticket-->
+      <ion-col size-xl="1">
+        <ion-item color="{{itemColorPairTicket}}">
+          <select id="select-pair-ticket" class="native-input sc-ion-input-md" style="font-size:small">
+            <option *ngFor="let ticket of arrPairTickets">{{ticket.ticket_num}}</option>
+          </select>
+        </ion-item>
+      </ion-col>
+      <!--last stop-->
+      <ion-col size-xl="1">
+        <ion-item lines="full">
+          <ion-label class="ion-text-nowrap">Last Stop</ion-label>
+          <ion-checkbox 
+            color="secondary" 
+            slot="start" 
+            [(ngModel)]='checkLastStop' 
+            (ionChange)="getFinalMileage()"
+            ></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <!--return-->
+      <ion-col size-xl="1">
+        <ion-item lines="full">
+          <ion-label class="ion-text-nowrap">Return</ion-label>
+          <ion-checkbox color="secondary" slot="start" [(ngModel)]='checkReturn' (ionChange)="calcCost()"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <!--pallets, reels, lifts, boxes-->
+    <!--
+    <ion-row>
+      <ion-col size="1">
+        <ion-item> 
+          <ion-label position="floating">Pallets</ion-label>
+          <ion-input type='number' min='0' [(ngModel)]='inputPallets' ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="1">
+        <ion-item> 
+          <ion-label position="floating">Reels</ion-label>
+          <ion-input type='number' min='0' [(ngModel)]='inputReels' ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="1">
+        <ion-item>
+          <ion-label position="floating">Lifts</ion-label>
+          <ion-input type='number' min='0' [(ngModel)]='inputLift' ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="1">
+        <ion-item>
+          <ion-label position="floating">Boxes</ion-label>
+          <ion-input type='number' min='0' [(ngModel)]='inputBoxes' ></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    -->
+    <!--material-->
+    <ion-row *ngFor="let row of material; index as i">
+      <ion-col size-xl="1">
+        <ion-input 
+          label="Count {{i+1}}" 
+          label-placement="floating"
+          type="number"
+          min="0"
+          fill="outline" 
+          [(ngModel)]="material[i].count"
+          (ionBlur)="calcTotalWeight()"
+        >
+        </ion-input>
+      </ion-col>
+      <ion-col size-xl="2">
+        <ion-input label="Material {{i+1}}" label-placement="floating" fill="outline" [(ngModel)]="material[i].material" >
+        </ion-input>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-input label="Dimenstions {{i+1}}" label-placement="floating" fill="outline" [(ngModel)]="material[i].dimensions">
+        </ion-input>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-input label="Weight {{i+1}}" label-placement="floating" fill="outline" [(ngModel)]="material[i].weight" (ionBlur)="calcTotalWeight()">
+        </ion-input>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-input label="Total Weight {{i+1}}" label-placement="floating" fill="outline" [(ngModel)]="material[i].total_weight" (ionBlur)="calcTotalWeight()">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <!--add/remove material line-->
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="addMaterial()">
+          <ion-icon name="add" ></ion-icon>
+        </ion-button>
+        <ion-button (click)="removeMaterial()">
+          <ion-icon name="remove" ></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <!--Freight-->
+    <!--
+      <ion-row>
+     <ion-col size-xl="1">
+      <ion-item lines="full">
+        <ion-label class="ion-text-nowrap">Freight</ion-label>
+        <ion-checkbox color="secondary" slot="start" [(ngModel)]='checkFreight' (ionChange)="setFreight()"></ion-checkbox>
+      </ion-item>
+     </ion-col>
+    </ion-row>
+    -->
+  
+    <!--large bundle, small bundle-->
+    <!--<ion-row>
+      <ion-col size-xl="1">
+        <ion-item lines="full">
+          <ion-label class="ion-text-nowrap">L. Bundle</ion-label>
+          <ion-checkbox color="secondary" slot="start" [(ngModel)]='checkLBundle' ></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item lines="full">
+          <ion-label class="ion-text-nowrap">S. Bundle</ion-label>
+          <ion-checkbox color="secondary" slot="start" [(ngModel)]='checkSBundle' ></ion-checkbox>
+        </ion-item>
+      </ion-col>
+    </ion-row>-->
+    <!--shipping, miles, weight-->
+    <ion-row>
+      <ion-col size-xl="2">
+        <ion-item>
+          <ion-label position="floating" >Shipping</ion-label>
+          <ion-input [(ngModel)]='inputShipping' ></ion-input>
+        </ion-item>
+      </ion-col>
+      <!--miles-->
+      <ion-col size-xl="1">
+        <ion-item>
+          <ion-label position="floating" >Miles</ion-label>
+          <ion-input  id='input-miles' [(ngModel)]='inputMiles' (ionBlur)="calcCost()"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item>
+          <ion-label position="floating" >Weight</ion-label>
+          <ion-input type="number" min='0' [(ngModel)]='inputWeight' ></ion-input>
+        </ion-item>
+      </ion-col>
+      <!--notes, dicount, cost-->
+    </ion-row>
+    <!--notes-->
+    <ion-row>
+      <ion-col size-xl="2">
+        <ion-item>
+          <ion-label position="floating">Notes</ion-label>
+          <ion-input [(ngModel)]='inputDetails'></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item>
+          <ion-label position="floating">Discount</ion-label>
+        <ion-input  type="number" [(ngModel)]="inputDiscount"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-item>
+          <ion-label position="floating">Cost</ion-label>
+        <ion-input  
+          type="number" 
+          [(ngModel)]="inputCost" 
+          class="{{inputCostClass}}" 
+          (ionChange)="setInputCostOverride(true)"
+        ></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+     <!--internal notes-->
+     <ion-row>
+      <ion-col size-xl="2">
+        <ion-item>
+          <ion-label color="danger" position="floating">Internal Notes</ion-label>
+          <ion-input [(ngModel)]='inputInternalNotes'></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <!--buttons-->
+    <ion-row>
+      <ion-col size-xl="1">
+        <ion-button (click)='validateTicket()' 
+        [disabled]="companyId==null
+                  || inputAddressFrom==''
+                  || inputAddressTo==''
+                  || selectType==null
+                  || selectTruck==null
+                  || selectStop==null
+                  "
+          >Create</ion-button>
+      </ion-col>
+      <ion-col size-xl="1">
+        <ion-button (click)='cancelNewTicket()'>Cancel</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+

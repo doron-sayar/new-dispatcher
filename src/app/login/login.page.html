@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="primary" mode="ios">
+    <ion-title>Alpine Dispatcher App</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" dir="ltr">
+  <ion-grid>
+    <ion-row>
+      <ion-col offset="4" size="3">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Welcome to Alpine Web App</ion-card-title>
+            <ion-card-subtitle>Please login</ion-card-subtitle>
+          </ion-card-header>
+        
+          <ion-card-content>
+            <ion-list>
+                <ion-item class="ion-no-padding">
+                  <ion-input aria-label="Username" placeholder="Username" [(ngModel)]="username"></ion-input>
+                </ion-item>
+                <ion-item class="ion-no-padding">
+                  <ion-input type="password" aria-label="Password" placeholder="Password" [(ngModel)]="password" ></ion-input>
+                </ion-item>
+                <ion-button expand="full" (click)="login()">Login</ion-button> <!---->
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+           
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+ 
+</ion-content>

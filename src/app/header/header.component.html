@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="{{color}}">
+    <ion-buttons slot="secondary" *ngIf="username">
+      <ion-button href="/add-ticket">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+      <ion-button href="/accepted-tickets">
+        <ion-icon name="{{icon_checkmark_done}}" size="large"></ion-icon>
+      </ion-button>
+      <ion-button href="/completed-tickets">
+        <ion-icon name="{{icon_checkmark}}" size="large"></ion-icon>
+      </ion-button>
+      <ion-button href="/home" >
+        <ion-icon name="{{icon_home}}" size="large"></ion-icon>
+      </ion-button> 
+      <ion-button (click)="logOut()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{header_title}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
