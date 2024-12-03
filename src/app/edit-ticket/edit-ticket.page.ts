@@ -72,7 +72,8 @@ export class EditTicketPage implements OnInit {
   public referrer: string;
   public isApprover:string;
   public signature_url:string;
-  public photo_url:string;
+  public pickup_photo_url:string;
+  public dropoff_photo_url:string;
   public  pickDateTime:string; //='20-01-2020T20:20:00'
   private pickDate:string;
   private pickTime:string;
@@ -218,11 +219,17 @@ export class EditTicketPage implements OnInit {
         + this.ticketDay + '/'
         + this.ticketNum + '/signature.jpg'
 
-      this.photo_url = 'https://alpine.pairsite.com/tickets/'
+      this.pickup_photo_url = 'https://alpine.pairsite.com/tickets/'
       + this.ticketYear + '/'
       + this.ticketMonth + '/'
       + this.ticketDay + '/'
-      + this.ticketNum + '/photos/photo1.jpg'
+      + this.ticketNum + '/pickup/photo1.jpg'
+
+      this.dropoff_photo_url = 'https://alpine.pairsite.com/tickets/'
+      + this.ticketYear + '/'
+      + this.ticketMonth + '/'
+      + this.ticketDay + '/'
+      + this.ticketNum + '/dropoff/photo1.jpg'
 
       console.log(result)
         

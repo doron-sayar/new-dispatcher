@@ -313,9 +313,13 @@
       <ion-col size="auto">
         <ion-button id="button-signature" expand="block" disabled='{{ticketDroppedTime==null}}'>Signature</ion-button>
       </ion-col>
-      <!--signature-->
+      <!--pickup photos-->
        <ion-col size="auto">
-        <ion-button id="button-photos" expand="block">Photos</ion-button>
+        <ion-button id="button-pickup-photos" expand="block">Pickup</ion-button>
+      </ion-col>
+      <!--dropoff photos-->
+      <ion-col size="auto">
+        <ion-button id="button-dropoff-photos" expand="block">Drop Off</ion-button>
       </ion-col>
       <!--priced-->
       <ion-col size="auto" *ngIf="(isApprover=='1')">
@@ -331,17 +335,32 @@
       </div>
     </ng-template>
   </ion-modal>
-  <ion-modal id="photos-modal" #modal trigger="button-photos">
+  <ion-modal id="pickup-photos-modal" #modal trigger="button-pickup-photos">
     <ng-template>
       <swiper-container [pagination]="true">
         <swiper-slide>
-          <img height="90%" src="{{photo_url}}">
+          <img height="90%" src="{{pickup_photo_url}}">
         </swiper-slide>
         <swiper-slide>
-          <img height="90%" src="{{photo_url}}">
+          <img height="90%" src="{{pickup_photo_url}}">
         </swiper-slide>
         <swiper-slide>
-          <img height="90%" src="{{photo_url}}">
+          <img height="90%" src="{{pickup_photo_url}}">
+        </swiper-slide>
+      </swiper-container>
+    </ng-template>
+  </ion-modal>
+  <ion-modal id="dropoff-photos-modal" #modal trigger="button-dropoff-photos">
+    <ng-template>
+      <swiper-container [pagination]="true">
+        <swiper-slide>
+          <img height="90%" src="{{dropoff_photo_url}}">
+        </swiper-slide>
+        <swiper-slide>
+          <img height="90%" src="{{dropoff_photo_url}}">
+        </swiper-slide>
+        <swiper-slide>
+          <img height="90%" src="{{dropoff_photo_url}}">
         </swiper-slide>
       </swiper-container>
     </ng-template>
